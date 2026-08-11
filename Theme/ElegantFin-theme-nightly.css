@@ -1519,6 +1519,46 @@ body:not(.hide-scroll) > .videoPlayerContainer {
     display: none;
 }
 
+/* ── Desktop: restore movie/show portrait poster in left column ─── */
+
+/* show the portrait (movie/show) poster card on desktop */
+.layout-desktop .detailImageContainer .card.portraitCard {
+    display: block;
+}
+
+/* fixed left-column for the poster container */
+.layout-desktop .detailImageContainer:has(.card.portraitCard) {
+    position: fixed;
+    top: var(--appBarHeight);
+    bottom: 0;
+    left: var(--sidePadding);
+    width: 22vh;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* style the poster card using theme variables */
+.layout-desktop .detailImageContainer:has(.card.portraitCard) .card {
+    pointer-events: auto;
+    border-radius: var(--largeRadius);
+    box-shadow: var(--cardShadow);
+    overflow: hidden;
+    border: 1px solid var(--borderColor);
+}
+
+/* shift content containers right to clear the fixed poster column */
+.layout-desktop .detailImageContainer:has(.card.portraitCard) ~ .detailPageWrapperContainer,
+.layout-desktop .detailImageContainer:has(.card.portraitCard) ~ .detailPageContent {
+    margin-left: calc(22vh + var(--sidePadding) + 1.5em);
+}
+
+/* remove the redundant left padding on detailPageContent in this layout */
+.layout-desktop:has(#itemDetailPage .detailImageContainer .card.portraitCard) .detailPageContent {
+    padding-left: 0 !important;
+}
+
 #itemDetailPage:has(.subtitle),
 #itemDetailPage:has(.musicParentName) {
     background: var(--backgroundAlphaOverlay);
