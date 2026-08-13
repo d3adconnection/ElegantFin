@@ -229,7 +229,7 @@
 body {
     --primaryItemPageNegativeSpace: 50vh;
     --secondaryItemPageNegativeSpace: 60vh;
-    --clearLogoBottomSpace: 12em;
+    --clearLogoBottomSpace: 9.5em;
 }
 
 select {
@@ -405,21 +405,30 @@ select {
 
 #castCollapsible .card,
 #guestCastContent .card {
-    width: fit-content !important;
-    min-width: calc(var(--cardWidth) / 2);
+    /* fit-content isn't reliable as a flex-basis here; max-content + a hard max-width clamp is */
+    width: max-content !important;
+    max-width: var(--cardWidth) !important;
+    /* box-sizing is border-box here, so the padding must be added on top of the portrait width to avoid it overflowing the card */
+    min-width: calc(var(--cardWidth) / 2 + var(--padding) * 2) !important;
+    /* these cards are flex items in the scroller; without this they stretch to fill the leftover row width instead of hugging their content */
+    flex: 0 0 auto !important;
 }
 
-/* let the name/role text stay on one line instead of being truncated with an ellipsis */
+/* let the name/role text grow the card a bit, but wrap instead of stretching indefinitely for long text */
 #castCollapsible .cardText,
 #guestCastContent .cardText {
     display: block;
-    width: fit-content;
-    max-width: none;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+    /* !important beats the base rule's own width so short text actually shrinks instead of padding out to max-width */
+    width: max-content !important;
+    max-width: 100% !important;
+    /* !important here too: the role line (cardText-secondary) otherwise keeps its own margin/alignment from the base rule */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+    /* text-align-last otherwise keeps the wrapped last line of the role left-aligned even though text-align is centered */
+    text-align-last: center !important;
     overflow: visible;
-    white-space: nowrap;
+    white-space: normal;
     text-overflow: clip;
     -webkit-line-clamp: unset;
     -webkit-box-orient: unset;
@@ -1485,6 +1494,12 @@ body:not(.hide-scroll) > .videoPlayerContainer {
     display: none;
 }
 
+/* season episode-list pages use a portraitCard + subtitle ("Season X"); hide the series logo there too, same as episode pages */
+#itemDetailPage:has(.detailImageContainer .portraitCard):has(.subtitle) .detailLogo {
+    z-index: 2;
+    display: none;
+}
+
 #itemDetailPage:has(.detailImageContainer .person) .detailLogo {
     z-index: 2;
     display: var(--artistClearLogoVisibility);
@@ -1506,7 +1521,8 @@ body:not(.hide-scroll) > .videoPlayerContainer {
 }
 
 .detailImageContainer:has(.backdropCard) ~ .nameContainer h1,
-.detailImageContainer:has(.album) ~ .nameContainer h1 {
+.detailImageContainer:has(.album) ~ .nameContainer h1,
+.detailImageContainer:has(.portraitCard) ~ .nameContainer:has(.subtitle) h1 {
     display: block !important;
 }
 
@@ -1551,6 +1567,11 @@ body:not(.hide-scroll) > .videoPlayerContainer {
     align-items: stretch;
 }
 
+/* widen column 1 to match the backdropCard's own width (episode/season pages) so it isn't clipped by the container */
+.layout-desktop .detailPagePrimaryContainer:has(.detailImageContainer .backdropCard) {
+    grid-template-columns: calc(3.0em + min(40vh, 50vw)) 1fr;
+}
+
 .layout-desktop .detailRibbon {
     grid-column: 1 / -1;
     grid-row: 1;
@@ -1559,7 +1580,7 @@ body:not(.hide-scroll) > .videoPlayerContainer {
 .layout-desktop .detailImageContainer {
     grid-column: 1;
     grid-row: 2;
-    padding-left: 2.5em;
+    padding-left: 3.0em;
     box-sizing: border-box;
     display: flex;
     align-items: flex-start !important;
@@ -1570,6 +1591,12 @@ body:not(.hide-scroll) > .videoPlayerContainer {
     display: block !important;
     width: 100% !important;
     flex: none !important;
+    align-self: flex-start !important;
+    margin-top: 0 !important;
+}
+
+/* the shared .card rule's auto top margin centers backdropCard vertically instead of top-aligning it like portraitCard */
+.layout-desktop .detailImageContainer > .backdropCard {
     align-self: flex-start !important;
     margin-top: 0 !important;
 }
