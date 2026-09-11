@@ -4502,9 +4502,15 @@ for extended styling, use the add-on */
                        ~196 goes greener/teal, ~212 goes midnight-navy.
      --oceanAccentHue  the accent - buttons, links, selection. 199 [default].
 
-   The surfaces sit much lighter than stock (14%/26% against upstream's 11%/16% lightness) because
-   that, not the accent, is what makes the theme read as shallow tropical water rather than deep
-   petrol - the background is the largest surface on screen.
+   The surfaces sit much lighter than stock (17%/28% against upstream's 11%/16% lightness) and much
+   more saturated (88%/85% against 45%/40% in the first pass, a 2.3x jump in channel spread) because
+   that, not the accent, is what makes the theme read as shallow tropical water - the background is
+   the largest surface on screen. The panel keeps upstream's ~10-point lift over the background; the
+   first saturated pass flattened that to 2 points and the panels vanished into the page.
+   The saturation is close to free: at these lightnesses hue 204 puts most of its luminance in the
+   green channel, and raising S trades red down against blue up, so text contrast barely moves
+   (12.87 -> 12.44 on the darker point across the whole 45% -> 85% range). Stock is a deliberately
+   desaturated blue-grey, so luminance-matching it the first time inherited its greyness.
 
    Note on the accent: upstream's accent is dark enough to carry white text, and around 21 rules
    rely on that. A baby blue accent is not, so --oceanOnAccent supplies a deep navy label in dark
@@ -4518,31 +4524,31 @@ for extended styling, use the add-on */
     --oceanAccentHue: 199;
 
     /* label colour for text sitting on a solid accent background */
-    --oceanOnAccent: hsl(var(--oceanHue), 70%, 12%);
+    --oceanOnAccent: hsl(var(--oceanHue), 85%, 11%);
 
     /* Base theme colors */
-    --darkerGradientPoint: hsl(var(--oceanHue), 45%, 14%);
-    --darkerGradientPointAlpha: hsla(var(--oceanHue), 45%, 14%, 0.85);
-    --lighterGradientPoint: hsl(var(--oceanHue), 40%, 26%);
-    --lighterGradientPointAlpha: hsla(var(--oceanHue), 40%, 26%, 0.85);
-    --gradientPointAlpha: hsla(var(--oceanHue), 40%, 26%, 0.3);
-    --headerColor: hsla(var(--oceanHue), 38%, 27%, 0.8);
-    --drawerColor: hsla(var(--oceanHue), 38%, 27%, 0.9);
+    --darkerGradientPoint: hsl(var(--oceanHue), 88%, 17%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 88%, 17%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 85%, 28%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 85%, 28%, 0.85);
+    --gradientPointAlpha: hsla(var(--oceanHue), 85%, 28%, 0.3);
+    --headerColor: hsla(var(--oceanHue), 78%, 27%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 78%, 27%, 0.9);
 
-    --borderColor: hsl(var(--oceanHue), 20%, 42%);
-    --darkerBorderColor: hsl(var(--oceanHue), 22%, 30%);
+    --borderColor: hsl(var(--oceanHue), 50%, 50%);
+    --darkerBorderColor: hsl(var(--oceanHue), 58%, 34%);
     /* --lighterBorderColor is a white alpha - left neutral on purpose, it sits on top of artwork */
 
-    --selectorBackgroundColor: hsl(var(--oceanHue), 28%, 29%);
-    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 28%, 29%, 0.5);
+    --selectorBackgroundColor: hsl(var(--oceanHue), 58%, 38%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 58%, 38%, 0.5);
 
     /* dark theme colors */
-    --textColor: hsl(var(--oceanHue), 25%, 92%);
-    --dimTextColor: hsl(var(--oceanHue), 16%, 72%);
+    --textColor: hsl(var(--oceanHue), 40%, 94%);
+    --dimTextColor: hsl(var(--oceanHue), 30%, 82%);
 
-    --accentColor: hsl(var(--oceanAccentHue), 88%, 62%);
-    --accentHoverColor: hsl(var(--oceanAccentHue), 92%, 70%);
-    --semiTransparentAccentColor: hsla(var(--oceanAccentHue), 90%, 75%, 0.18);
+    --accentColor: hsl(var(--oceanAccentHue), 88%, 74%);
+    --accentHoverColor: hsl(var(--oceanAccentHue), 92%, 83%);
+    --semiTransparentAccentColor: hsla(var(--oceanAccentHue), 90%, 80%, 0.18);
 
     /* Base component colors - these keep white labels, so they stay mid-tone */
     --btnSubmitColor: hsl(var(--oceanAccentHue), 88%, 32%);
@@ -4550,13 +4556,13 @@ for extended styling, use the add-on */
     --checkboxCheckedBgColor: hsl(var(--oceanAccentHue), 88%, 40%);
     /* bright on purpose: the lifted background needs a strong focus fill, and it takes
        the --oceanOnAccent label like the accent does rather than white */
-    --highlightOutlineColor: hsl(var(--oceanAccentHue), 90%, 58%);
+    --highlightOutlineColor: hsl(var(--oceanAccentHue), 92%, 64%);
 
-    --tableBodyColor: hsl(var(--oceanHue), 32%, 27%);
+    --tableBodyColor: hsl(var(--oceanHue), 58%, 38%);
 
     /* textures - these two hard-code the header colour instead of using var(--headerColor) */
-    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 38%, 27%, 0.95) 30%, 55%, transparent 90%);
-    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 38%, 27%), 70%, transparent);
+    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 78%, 27%, 0.95) 30%, 55%, transparent 90%);
+    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 78%, 27%), 70%, transparent);
 }
 
 :root[data-theme="light"] {
@@ -4564,22 +4570,22 @@ for extended styling, use the add-on */
        which also means white is the right label colour on it */
     --oceanOnAccent: #fff;
 
-    --darkerGradientPoint: hsl(var(--oceanHue), 40%, 96%);
-    --darkerGradientPointAlpha: hsla(var(--oceanHue), 40%, 96%, 0.85);
-    --lighterGradientPoint: hsl(var(--oceanHue), 36%, 93%);
+    --darkerGradientPoint: hsl(var(--oceanHue), 95%, 96%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 95%, 96%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 88%, 92%);
     --lighterGradientPointAlpha: hsla(var(--oceanHue), 50%, 99%, 0.85);
 
-    --headerColor: hsla(var(--oceanHue), 38%, 93%, 0.8);
-    --drawerColor: hsla(var(--oceanHue), 38%, 93%, 0.9);
+    --headerColor: hsla(var(--oceanHue), 88%, 92%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 88%, 92%, 0.9);
 
-    --borderColor: hsl(var(--oceanHue), 24%, 68%);
-    --darkerBorderColor: hsl(var(--oceanHue), 26%, 80%);
+    --borderColor: hsl(var(--oceanHue), 55%, 66%);
+    --darkerBorderColor: hsl(var(--oceanHue), 60%, 80%);
 
     --selectorBackgroundColor: hsl(var(--oceanHue), 50%, 99%);
     --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 30%, 90%, 0.5);
 
     --textColor: hsl(var(--oceanHue), 30%, 14%);
-    --dimTextColor: hsl(var(--oceanHue), 20%, 36%);
+    --dimTextColor: hsl(var(--oceanHue), 35%, 36%);
 
     --accentColor: hsl(var(--oceanAccentHue), 90%, 32%);
     --accentHoverColor: hsl(var(--oceanAccentHue), 88%, 35%);
@@ -4596,7 +4602,7 @@ for extended styling, use the add-on */
     --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95) 30%, 55%, transparent 90%);
     --headerColorGradientAlt: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95), 70%, transparent);
 
-    --cardShadow: 0 1px 6px 0px hsl(var(--oceanHue), 25%, 85%);
+    --cardShadow: 0 1px 6px 0px hsl(var(--oceanHue), 55%, 84%);
 }
 
 /* text sitting on a solid accent background. selectors are copied verbatim from the rules that
@@ -4669,19 +4675,19 @@ for extended styling, use the add-on */
 
 /* these two keep a fixed dark tint in both themes, as upstream does - the gradient is drawn over artwork */
 .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 45%, 14%, 0.25));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 88%, 17%, 0.25));
 }
 
 .layout-tv .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 45%, 14%, 0.95));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 88%, 17%, 0.95));
 }
 
 #loginPage .padded-left.padded-right.padded-bottom-page {
-    background: hsla(var(--oceanHue), 38%, 27%, 0.7);
+    background: hsla(var(--oceanHue), 78%, 27%, 0.7);
 }
 
 .metadataSidebarIcon {
-    color: hsl(var(--oceanHue), 26%, 60%);
+    color: hsl(var(--oceanHue), 45%, 64%);
 }
 
 /* The mini-play button and the watched tick stay green, and delete stays red: they are status
