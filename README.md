@@ -128,6 +128,10 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
 > 	
 </details>
 
+<br>
+
+**Note:** On Jellyfin v12, you will need to set `User Settings > Display > Display Mode` to `"Desktop (Legacy)"` on desktop, or `"Mobile (Legacy)"` on mobile. The new (non-legacy) UI is not yet fully supported.
+
 <hr>
 
 ### 🧩 How to customise this theme?
@@ -158,6 +162,8 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
 > - Third, replace `<YOUR-JELLYFIN-SERVER-ADDRESS>` with your Jellyfin server address, for example, `http://192.168.0.1:8096`.
 > - Don't forget the correct http or https in your domain.
 > - You can also modify the parameters, for example blur size or the resolution, according to your liking.
+> - You can also change the text shown on the login button by adding `--loginPageText: "placeholder";` line to the same `:root` block.
+> - Replace `"placeholder"` with the text of your choice.
 > - Once done, save and refresh your apps and webpages.
 
 </details>
@@ -174,7 +180,7 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
 >     }
 >     ```
 > - To hide the three-dot button that shows up next to these buttons, also include `--menuButtonVisibility: none;` in `:root{}`
-> - To undo these changes, simply remove this code block or switch between `block` and `none`.
+> - To undo these changes, simply remove the code block or switch between `block` and `none`.
 
 </details>
 
@@ -241,16 +247,26 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
  
 > https://github.com/user-attachments/assets/b5868cd2-8df9-490d-a2b6-4386c6ddcd56
 > 
-> - You can switch between these using `--appBarHeight`.
-> - Use 5em to enable the fading app bar (seamless) (default);
-> - Or, use 4.6em to get the solid app bar (cleaner with border)
+> - There are three app bar styles to choose from: seamless (default), solid, and fully transparent.
+> - No action is needed for the seamless style, it is the default and shows a frosted blur effect.
+> - To enable the solid app bar style (cleaner with a visible border), copy and paste the following code at the end in Custom CSS box, click save and finally refresh your app/webpage.
 > 	```css
 > 	:root{
-> 	  /* example */
-> 	  --appBarHeight: 4.6em;
+> 	  --appBarSeamlessBlur: none;
+> 	  --appBarBlurStrength: var(--blurLargest);
+> 	  --appBarColor: var(--headerColor);
+> 	  --appBarBorder: var(--defaultBorder);
+> 	  --appBarTabsPadding: 0;
 > 	}
 > 	```
-> - To undo this change, simply remove this code block.
+> - To enable the fully transparent app bar style, copy and paste only the following code at the end in Custom CSS box, click save and finally refresh your app/webpage.
+> 	```css
+> 	:root{
+> 	  --appBarSeamlessBlur: none;
+> 	  --appBarColor: transparent;
+> 	}
+> 	```
+> - To undo these changes, simply remove the code block.
  
 </details>
 
@@ -259,7 +275,7 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
  
 >   <img width="640" height="auto" alt="image" src="https://github.com/user-attachments/assets/0cab75aa-8fcd-4174-b0db-cc533b724bca" />
 > 
-> - Check out the [the theme Playground page](https://github.com/lscambo13/ElegantFin/discussions/221) for different color themes.
+> - Check out the [the theme Playground page](https://github.com/lscambo13/ElegantFin/discussions/221) for different color themes created by other users.
 > - You can also experiment and share your own take there if you wish.
  
 </details>
@@ -278,6 +294,98 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
 > 	```
 > - To undo this change, simply remove this code block or set the value back to `1`.
  
+</details>
+
+<details>
+  <summary><i>11. Toggle the title and logo elements on media pages</i></summary>
+ 
+> - Caution: These options control which elements appear on movie, TV show, and artist detail pages. They are meant for experienced users, so please do not randomly enable or disable them unless you know what you are doing.
+> - These variables control the visibility of the original title, clear logo, and main title on movie/TV show and artist detail pages.
+> 	```css
+> 	:root{
+> 	  /* Movie & TV Pages */
+> 	  --itemOriginalTitleVisibility: block; /* block: show the original title if available [default]; none: always hide it */
+> 	  --clearLogoVisibility: block; /* block: show the clear logo if available [default]; none: always hide it */
+> 	  --itemTitleVisibility: none; /* none: hide the main title if its logo is available [default]; block: always show it */
+> 
+> 	  /* Music Pages */
+> 	  --artistClearLogoVisibility: block; /* block: show the artist clear logo if available [default]; none: always hide it */
+> 	  --artistTitleVisibility: none; /* none: hide the artist title [default]; block: always show it */
+> 	  --artistPageBackground: unset; /* unset: dim the artist background for better clear logo visibility on desktops [default]; none: show it fully */
+> 	}
+> 	```
+> - To undo these changes, simply remove the variables you added or set the values back to their defaults shown above.
+ 
+</details>
+
+<details>
+  <summary><i>12. Toggle the visibility of some UI elements on mobile</i></summary>
+
+> <img width="640" height="auto" alt="image" src="https://github.com/user-attachments/assets/c11a1d94-9b56-419a-93df-5a6a43ec00c1" />
+>
+> - These variables control the visibility of small UI elements that show up on phones and small screens.
+>     ```css
+>     :root {
+>         --miniOverlayButtonVisibility: block; /* block: show the mini play or three-dot button on cards on mobile [default]; none: always hide them on mobile */
+>         --endsAtVisibility: block; /* block: show the 'Ends at...' time indicator on phones [default]; none: always hide it on phones */
+>         --criticsRatingVisibility: none; /* none: hide the critics tomato rating on phones [default]; block: show it on phones */
+>     }
+>     ```
+> - To undo these changes, simply remove the variables you added or set the values back to their defaults shown above.
+
+</details>
+
+<details>
+  <summary><i>13. Adjust component sizes (advanced)</i></summary>
+ 
+> - Caution: Changing these values may break the layout on different screen sizes, so please only adjust them if you are comfortable with CSS.
+> - These variables control the standard corner radius, border, and spacing values used throughout the theme.
+> 	```css
+> 	:root{
+>     /* Corner radius */
+> 	  --largerRadius: 1.25em; 
+> 	  --largeRadius: 1em; 
+> 	  --smallRadius: 0.5em; 
+> 	  --smallerRadius: 0.375em;
+>
+>     /* Border thickness */
+> 	  --borderWidth: 0.06em; 
+> 	  --borderWidthDouble: 0.12em; 
+> 	}
+> 	```
+> - To undo these changes, simply remove the variables you added or set the values back to their defaults shown above.
+ 
+</details>
+
+<details>
+  <summary><i>14. Switch between IMDb and TMDB star colors</i></summary>
+
+> <img width="1066" height="207" alt="star" src="https://github.com/user-attachments/assets/6ddc2ab6-5ea5-45bb-82a8-9256e594e410" />
+>
+> - Star rating icon in ElegantFin uses the TMDB colors by default, since that is where the rating is sourced from.
+> - To switch them to the gold IMDb colors, copy and paste the following code at the end in Custom CSS box, click save and finally refresh your app/webpage.
+>     ```css
+>     .starIcon {
+>         --colors: var(--imdb);
+>     }
+>     ```
+> - To go back to the TMDB colors, replace `var(--imdb)` with `var(--tmdb)` or simply remove the code block.
+
+</details>
+
+<details>
+  <summary><i>15. Switch between Light and Dark modes</i></summary>
+
+| Desktop                                                                                                                                         | Mobile                                                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/3483bca2-bc5f-4444-a815-51b27a38c4eb"><br><strong>Dark</strong></div>  | <div align="center"><img src="https://github.com/user-attachments/assets/f3c9d4e2-7e72-498e-ad3b-d1db0fcecd19"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/a300fc79-c2c4-40bd-a18b-c0a45e381082"><br><strong>Light</strong></div> | <div align="center"><img src="https://github.com/user-attachments/assets/9f1d80df-dcdb-4088-a3e6-15ed4209f3ee"></div> |
+
+> - ElegantFin now comes with a dark by default, but an alternative light mode is also available
+> - To switch between these modes, go to `User Settings > Display > Theme` and select either **Dark** or **Light**.
+> - The "Theme" setting above is **not** to be confused with the "Server Dashboard Theme" in the Dashboard, which is **not supported**.
+> - Only the Light and Dark theme options are supported, and Jellyfin does not automatically switch between them, so you have to change it manually.
+
 </details>
 
 <hr>
@@ -317,7 +425,7 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
   <summary>3️⃣ - <i>Why do I notice visual bugs and inconsistencies on Jellyfin Media Player?</i></summary>
  
 > - JMP is based on Qt 5.x which uses a very outdated web engine. It does not support many new CSS features, so it is unsupported.
-> - [Jellyfin Desktop](https://github.com/jellyfin/jellyfin-desktop) is the new official client moving forward. It seems to be in testing right now. Use it for better compatibility or use the web app instead.
+> - You might want to try [Jellium Desktop](https://github.com/andrewrabert/jellium-desktop) which is an unofficial client, and it is still in testing right now.
  
 </details>
 
@@ -345,7 +453,8 @@ https://github.com/user-attachments/assets/bb7f3174-b703-4c98-a23c-e6bb4abba390
 <details>
   <summary>6️⃣ - <i>How do I report bugs/issues?</i></summary>
  
-> - First check [here](https://github.com/lscambo13/ElegantFin/issues?q=) whether a similar issue has been reported already. If it exists, upvote and comment there to let me know.
+> - First check [issues](https://github.com/lscambo13/ElegantFin/issues?q=is%3Aissue) and [discussions](https://github.com/lscambo13/ElegantFin/discussions?discussions_q=) to see whether a similar issue has been reported already. If it exists, upvote and comment there to let me know.
+> - Before reporting a bug, make sure the issue is not caused by a plugin. Temporarily disable your plugins, or remove any plugin add-on CSS, to see if the issue persists.
 > - Alternatively, create a new issue [here](https://github.com/lscambo13/ElegantFin/issues/new/choose).
  
 </details>

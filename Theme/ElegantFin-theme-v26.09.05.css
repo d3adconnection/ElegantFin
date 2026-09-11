@@ -1,4 +1,4 @@
-/*! ElegantFin Theme Nightly for Jellyfin by lscambo13 */
+﻿/*! ElegantFin Theme v26.09.05 for Jellyfin by lscambo13 */
 
 /* Add-ons: Uncomment to enable */
 /* @import url(./assets/add-ons/media-bar-plugin-support-nightly.css); */
@@ -28,7 +28,7 @@
 }
 
 :root {
-    --elegantFinFooterText: "ElegantFin Nightly";
+    --elegantFinFooterText: "ElegantFin v26.09.05";
 
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
