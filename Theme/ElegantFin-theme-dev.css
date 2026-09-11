@@ -4492,121 +4492,196 @@ for extended styling, use the add-on */
 
 /* ocean blue palette - start */
 
-/* Re-hues the theme's chrome and accents from its stock blue-grey/indigo to an ocean blue.
-   This block only re-declares variables the theme already defines (plus the four rules below,
-   where the theme hard-codes a base colour), so it stays a pure addition at the end of the file
-   and does not interfere with the 3-way merge against upstream nightly.
+/* Re-hues the theme's chrome and accents from its stock blue-grey/indigo to a tropical water blue:
+   lifted, sunlit surfaces and a baby blue accent. This block only re-declares variables the theme
+   already defines, plus the rules listed at the bottom, so it stays a pure addition at the end of
+   the file and the 3-way merge against upstream nightly never has to touch it.
 
-   Each colour keeps the relative luminance of the stock colour it replaces and only moves hue and
-   saturation, so contrast ratios stay where upstream put them - a bright cyan at the stock HSL
-   lightness would have been far lighter than the indigo it replaces and would have broken
-   white-on-accent text. The focus ring is the one deliberate exception, noted at its declaration.
+   Two knobs:
+     --oceanHue        the chrome - backgrounds, borders, text tint. 204 [default];
+                       ~196 goes greener/teal, ~212 goes midnight-navy.
+     --oceanAccentHue  the accent - buttons, links, selection. 199 [default].
 
-   --oceanHue drives all of it: 201 is open sea [default]; ~190 goes tropical/cyan,
-   ~212 goes deep midnight-navy. Saturation and lightness stay per-variable. */
+   The surfaces sit much lighter than stock (14%/26% against upstream's 11%/16% lightness) because
+   that, not the accent, is what makes the theme read as shallow tropical water rather than deep
+   petrol - the background is the largest surface on screen.
+
+   Note on the accent: upstream's accent is dark enough to carry white text, and around 21 rules
+   rely on that. A baby blue accent is not, so --oceanOnAccent supplies a deep navy label in dark
+   mode and plain white in light mode (where the accent stays deep so links stay readable against
+   a near-white page), and the handful of rules that put text on a solid accent read it. Colours
+   that keep white text by design - the submit button, checkbox fill, focus ring, count badge -
+   deliberately stay at a mid tone rather than following the accent up. */
 
 :root {
-    --oceanHue: 201;
+    --oceanHue: 204;
+    --oceanAccentHue: 199;
+
+    /* label colour for text sitting on a solid accent background */
+    --oceanOnAccent: hsl(var(--oceanHue), 70%, 12%);
 
     /* Base theme colors */
-    --darkerGradientPoint: hsl(var(--oceanHue), 48%, 10%);
-    --darkerGradientPointAlpha: hsla(var(--oceanHue), 48%, 10%, 0.85);
-    --lighterGradientPoint: hsl(var(--oceanHue), 38%, 17%);
-    --lighterGradientPointAlpha: hsla(var(--oceanHue), 38%, 17%, 0.85);
-    --gradientPointAlpha: hsla(var(--oceanHue), 38%, 17%, 0.3);
-    --headerColor: hsla(var(--oceanHue), 36%, 18%, 0.8);
-    --drawerColor: hsla(var(--oceanHue), 36%, 18%, 0.9);
+    --darkerGradientPoint: hsl(var(--oceanHue), 45%, 14%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 45%, 14%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 40%, 26%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 40%, 26%, 0.85);
+    --gradientPointAlpha: hsla(var(--oceanHue), 40%, 26%, 0.3);
+    --headerColor: hsla(var(--oceanHue), 38%, 27%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 38%, 27%, 0.9);
 
-    --borderColor: hsl(var(--oceanHue), 20%, 34%);
-    --darkerBorderColor: hsl(var(--oceanHue), 22%, 23%);
+    --borderColor: hsl(var(--oceanHue), 20%, 42%);
+    --darkerBorderColor: hsl(var(--oceanHue), 22%, 30%);
     /* --lighterBorderColor is a white alpha - left neutral on purpose, it sits on top of artwork */
 
-    --selectorBackgroundColor: hsl(var(--oceanHue), 26%, 26%);
-    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 26%, 26%, 0.5);
+    --selectorBackgroundColor: hsl(var(--oceanHue), 28%, 29%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 28%, 29%, 0.5);
 
     /* dark theme colors */
-    --textColor: hsl(var(--oceanHue), 20%, 85%);
-    --dimTextColor: hsl(var(--oceanHue), 16%, 66%);
+    --textColor: hsl(var(--oceanHue), 25%, 92%);
+    --dimTextColor: hsl(var(--oceanHue), 16%, 72%);
 
-    --accentColor: hsl(var(--oceanHue), 85%, 38%);
-    --accentHoverColor: hsl(var(--oceanHue), 80%, 43%);
-    /* stock is a flat white wash; a pale ocean tint at the same luminance reads as part of the palette */
-    --semiTransparentAccentColor: hsla(var(--oceanHue), 90%, 70%, 0.16);
+    --accentColor: hsl(var(--oceanAccentHue), 88%, 62%);
+    --accentHoverColor: hsl(var(--oceanAccentHue), 92%, 70%);
+    --semiTransparentAccentColor: hsla(var(--oceanAccentHue), 90%, 75%, 0.18);
 
-    /* Base component colors */
-    --btnSubmitColor: hsl(var(--oceanHue), 88%, 25%);
-    --btnSubmitBorderColor: hsl(var(--oceanHue), 80%, 42%);
-    --checkboxCheckedBgColor: hsl(var(--oceanHue), 88%, 32%);
-    /* focus ring - deliberately brighter than the stock blue, it is what a TV remote follows */
-    --highlightOutlineColor: hsl(var(--oceanHue), 92%, 38%);
+    /* Base component colors - these keep white labels, so they stay mid-tone */
+    --btnSubmitColor: hsl(var(--oceanAccentHue), 88%, 32%);
+    --btnSubmitBorderColor: hsl(var(--oceanAccentHue), 85%, 50%);
+    --checkboxCheckedBgColor: hsl(var(--oceanAccentHue), 88%, 40%);
+    /* bright on purpose: the lifted background needs a strong focus fill, and it takes
+       the --oceanOnAccent label like the accent does rather than white */
+    --highlightOutlineColor: hsl(var(--oceanAccentHue), 90%, 58%);
 
-    --tableBodyColor: hsl(var(--oceanHue), 32%, 18%);
+    --tableBodyColor: hsl(var(--oceanHue), 32%, 27%);
 
     /* textures - these two hard-code the header colour instead of using var(--headerColor) */
-    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 36%, 18%, 0.95) 30%, 55%, transparent 90%);
-    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 36%, 18%), 70%, transparent);
+    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 38%, 27%, 0.95) 30%, 55%, transparent 90%);
+    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 38%, 27%), 70%, transparent);
 }
 
 :root[data-theme="light"] {
-    --darkerGradientPoint: hsl(var(--oceanHue), 30%, 96%);
-    --darkerGradientPointAlpha: hsla(var(--oceanHue), 30%, 96%, 0.85);
-    --lighterGradientPoint: hsl(var(--oceanHue), 26%, 94%);
-    --lighterGradientPointAlpha: hsla(var(--oceanHue), 40%, 99%, 0.85);
+    /* the light accent stays deep so links and buttons hold up on a near-white page,
+       which also means white is the right label colour on it */
+    --oceanOnAccent: #fff;
 
-    --headerColor: hsla(var(--oceanHue), 28%, 94%, 0.8);
-    --drawerColor: hsla(var(--oceanHue), 28%, 94%, 0.9);
+    --darkerGradientPoint: hsl(var(--oceanHue), 40%, 96%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 40%, 96%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 36%, 93%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 50%, 99%, 0.85);
 
-    --borderColor: hsl(var(--oceanHue), 18%, 70%);
-    --darkerBorderColor: hsl(var(--oceanHue), 20%, 80%);
+    --headerColor: hsla(var(--oceanHue), 38%, 93%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 38%, 93%, 0.9);
 
-    --selectorBackgroundColor: hsl(var(--oceanHue), 40%, 99%);
-    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 25%, 90%, 0.5);
+    --borderColor: hsl(var(--oceanHue), 24%, 68%);
+    --darkerBorderColor: hsl(var(--oceanHue), 26%, 80%);
 
-    --textColor: hsl(var(--oceanHue), 25%, 14%);
-    --dimTextColor: hsl(var(--oceanHue), 18%, 36%);
+    --selectorBackgroundColor: hsl(var(--oceanHue), 50%, 99%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 30%, 90%, 0.5);
 
-    --accentColor: hsl(var(--oceanHue), 88%, 30%);
-    --accentHoverColor: hsl(var(--oceanHue), 85%, 36%);
+    --textColor: hsl(var(--oceanHue), 30%, 14%);
+    --dimTextColor: hsl(var(--oceanHue), 20%, 36%);
 
-    --btnSubmitColor: hsl(var(--oceanHue), 82%, 34%);
-    --btnSubmitBorderColor: hsl(var(--oceanHue), 75%, 45%);
+    --accentColor: hsl(var(--oceanAccentHue), 90%, 32%);
+    --accentHoverColor: hsl(var(--oceanAccentHue), 88%, 35%);
 
-    --checkboxCheckedBgColor: hsl(var(--oceanHue), 88%, 38%);
-    --highlightOutlineColor: hsl(var(--oceanHue), 95%, 40%);
+    --btnSubmitColor: hsl(var(--oceanAccentHue), 85%, 34%);
+    --btnSubmitBorderColor: hsl(var(--oceanAccentHue), 78%, 45%);
 
-    --textareaBackgroundColor: hsl(var(--oceanHue), 40%, 99%);
-    --tableBodyColor: hsl(var(--oceanHue), 40%, 99%);
+    --checkboxCheckedBgColor: hsl(var(--oceanAccentHue), 88%, 38%);
+    --highlightOutlineColor: hsl(var(--oceanAccentHue), 92%, 32%);
+
+    --textareaBackgroundColor: hsl(var(--oceanHue), 50%, 99%);
+    --tableBodyColor: hsl(var(--oceanHue), 50%, 99%);
 
     --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95) 30%, 55%, transparent 90%);
     --headerColorGradientAlt: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95), 70%, transparent);
 
-    --cardShadow: 0 1px 6px 0px hsl(var(--oceanHue), 20%, 85%);
+    --cardShadow: 0 1px 6px 0px hsl(var(--oceanHue), 25%, 85%);
+}
+
+/* text sitting on a solid accent background. selectors are copied verbatim from the rules that
+   paint that background, so these win on source order. the :active / :hover states are not here
+   on purpose: they sit on --activeBackgroundColor, which is the translucent wash over the page
+   rather than a solid accent, so their white text is still correct. */
+
+::selection {
+    color: var(--oceanOnAccent);
+}
+
+.layout-desktop .itemExternalLinks > a:hover,
+.itemExternalLinks > a:active {
+    color: var(--oceanOnAccent) !important;
+}
+
+.Mui-selected {
+    color: var(--oceanOnAccent);
+}
+
+.navMenuOption-selected {
+    color: var(--oceanOnAccent);
+}
+
+.filterIndicator {
+    color: var(--oceanOnAccent);
+}
+
+/* upstream paints this background behind a :has() selector too, so old TV browsers drop both
+   rules together and never end up with a light label on a light accent */
+.actionSheetMenuItem:has(.listItemIcon.check) .listItemBodyText {
+    color: var(--oceanOnAccent);
+}
+
+/* the focus fill is the accent's sibling: these rules paint --highlightOutlineColor behind text.
+   plain selectors only, so old TV browsers keep them - this is the TV remote's focus indicator */
+
+.emby-button.show-focus:focus,
+.paper-icon-button-light.show-focus:focus,
+.emby-tabs .emby-button.show-focus:focus {
+    color: var(--oceanOnAccent) !important;
+}
+
+.listItem:focus,
+.listItem:focus .listItemBodyText,
+.listItem:focus .secondary {
+    color: var(--oceanOnAccent);
+}
+
+.alphaPickerButton-tv:focus {
+    color: var(--oceanOnAccent);
+}
+
+.guide-channelHeaderCell:focus {
+    color: var(--oceanOnAccent) !important;
+}
+
+.programCell:focus > .guideProgramName {
+    color: var(--oceanOnAccent);
 }
 
 /* the four places the theme hard-codes a base colour instead of reading a variable.
-   selectors are copied verbatim from the rules above so they win on source order alone */
+   the count badge keeps its own white label, so it stays mid-tone rather than baby blue */
 
 .countIndicator,
 .fullSyncIndicator,
 .mediaSourceIndicator {
-    background: hsl(var(--oceanHue), 90%, 29%);
+    background: hsl(var(--oceanAccentHue), 90%, 32%);
 }
 
-/* these two keep the stock dark tint in both themes, as upstream does - the gradient is drawn over artwork */
+/* these two keep a fixed dark tint in both themes, as upstream does - the gradient is drawn over artwork */
 .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 48%, 10%, 0.25));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 45%, 14%, 0.25));
 }
 
 .layout-tv .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 48%, 10%, 0.95));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 45%, 14%, 0.95));
 }
 
 #loginPage .padded-left.padded-right.padded-bottom-page {
-    background: hsla(var(--oceanHue), 36%, 18%, 0.7);
+    background: hsla(var(--oceanHue), 38%, 27%, 0.7);
 }
 
 .metadataSidebarIcon {
-    color: hsl(var(--oceanHue), 26%, 55%);
+    color: hsl(var(--oceanHue), 26%, 60%);
 }
 
 /* The mini-play button and the watched tick stay green, and delete stays red: they are status
