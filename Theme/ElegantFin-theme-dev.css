@@ -528,11 +528,13 @@ select {
 
 #castCollapsible .card,
 #guestCastContent .card {
+    /* --cardWidth is built on --sidePadding, which is a %; a % carried in a var() resolves against whichever element uses it,
+       so on the portrait it measured the small card box instead of the whole row and came out wider than the card (clipped on the right).
+       vw resolves the same on every element, which also lets the portrait's width count towards the card's max-content width */
+    --sidePadding: 3.3vw;
     /* fit-content isn't reliable as a flex-basis here; max-content + a hard max-width clamp is */
     width: max-content !important;
     max-width: var(--cardWidth) !important;
-    /* box-sizing is border-box here, so the padding must be added on top of the portrait width to avoid it overflowing the card */
-    min-width: calc(var(--cardWidth) / 2 + var(--padding) * 2) !important;
     /* these cards are flex items in the scroller; without this they stretch to fill the leftover row width instead of hugging their content */
     flex: 0 0 auto !important;
 }
