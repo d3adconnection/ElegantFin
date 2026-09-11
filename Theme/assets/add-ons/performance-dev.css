@@ -1,0 +1,263 @@
+/*! ElegantFin performance add-on (dev) - load this AFTER the theme */
+
+/* Paste both lines in the Custom CSS box (jsDelivr generates the .min.css on the fly):
+   @import url("https://cdn.jsdelivr.net/gh/d3adconnection/ElegantFin@main/Theme/ElegantFin-theme-dev.min.css");
+   @import url("https://cdn.jsdelivr.net/gh/d3adconnection/ElegantFin@main/Theme/assets/add-ons/performance-dev.min.css");
+
+   What this does:
+   - desktop keeps the full look; only invisible or over-video blur and the 5 MB icon font change
+   - TVs and phones get graded reductions automatically (layout-tv / layout-mobile)
+   - the OS "reduce transparency" / "reduce motion" settings are honoured
+   - a "lite mode" block at the end can be forced on any device
+
+   Everything here is done through CSS variables where the theme already has them; the few values
+   the theme hard-codes are re-declared below through --perf* variables whose defaults reproduce
+   the theme exactly, so this file changes nothing on desktop unless a tier or toggle asks for it.
+   Rules outside the @media (prefers-*) blocks avoid :has() / :is() / :where() on purpose, so old TV
+   browsers do not drop them. */
+
+/* icon font - start */
+
+/* the theme's default 'Material Symbols Rounded' is the full variable font (~5.2 MB, four axes).
+   the theme only ever varies FILL (0/1) and opsz (30, 48 on one chevron); wght is always 400 and GRAD 0,
+   so those two axes are pinned here. same glyph set, so plugins keep their icons. */
+
+/* opsz 20..48 + FILL: pixel-identical to the full font for everything the theme does (~1.35 MB) */
+@font-face {
+    font-family: "Material Symbols Rounded Slim";
+    font-style: normal;
+    /* keep the range so a bold font-weight never triggers synthetic bold */
+    font-weight: 100 700;
+    font-display: block;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v372/sykO-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvLgyidOK7BDB_Qb9vUe2jjwjHK-P3BukXX.woff2)
+        format("woff2");
+}
+
+/* FILL only, opsz pinned at 24 (the nearest named instance to the theme's 30): strokes a touch heavier at large sizes (~0.5 MB) */
+@font-face {
+    font-family: "Material Symbols Rounded Lite";
+    font-style: normal;
+    font-weight: 100 700;
+    font-display: block;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v372/syl7-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvLgyidOK7BDB_Qb9vUdV6_gjDK-P3JuF_Zs-obHph2-jOcZTKPqw.woff2)
+        format("woff2");
+}
+
+:root {
+    /* use "Material Symbols Rounded Slim" [default];
+       use "Material Symbols Rounded Lite" to save another ~0.8 MB;
+       use "Material Symbols Rounded" to go back to the theme's full font */
+    --iconPack: "Material Symbols Rounded Slim";
+}
+
+:root.layout-tv,
+:root.layout-mobile {
+    --iconPack: "Material Symbols Rounded Lite";
+}
+
+/* icon font - end */
+
+/* hooks for values the theme hard-codes - start */
+/* the defaults reproduce the theme's own values; the tiers below only change the variables */
+
+/* the three backdrop copies: the element, a blurred 1.1x ::before and an 80vh masked ::after */
+.backdropImage::before,
+.backdropImage::after {
+    content: var(--perfBackdropLayers, "");
+}
+
+/* every card re-lays out for half a second when the window resizes or the phone rotates */
+.card {
+    transition: var(--perfCardTransition, width 0.5s);
+}
+
+/* stock Jellyfin fixes the detail page backdrop to the viewport, which repaints it on every scroll on older engines */
+.itemBackdrop {
+    background-attachment: var(--perfItemBackdropAttachment, fixed);
+}
+
+.headroom {
+    transition: var(--perfHeadroomTransition, transform 0.5s);
+}
+
+/* hooks - end */
+
+/* all devices: blur that is never visible or that sits over playing video - start */
+
+/* the track behind the resume progress bars (cards, list rows, the detail page backdrop) is a few pixels tall;
+   the blur is not noticeable but it puts a compositing layer on every card that has one */
+.itemProgressBar {
+    --blurLarge: none;
+}
+
+/* blur over a playing video has to be recomputed on every video frame, not just on scroll */
+.playerStats,
+.iconOsd,
+.upNextContainer {
+    --blurDefault: none;
+}
+
+/* Jellyfin marks the body with hide-scroll while a video plays (the web player and Jellyfin Media Player's mpv player both do) */
+body.hide-scroll .toast,
+body.hide-scroll .dialog {
+    --blurDefault: none;
+}
+
+/* all devices - end */
+
+/* TV tier - start */
+/* no blur or shadows at all; surfaces are made near-opaque so they stay legible without the blur */
+
+:root.layout-tv {
+    --blurSmallest: none;
+    --blurDefault: none;
+    --blurLarge: none;
+    --blurLargest: none;
+
+    /* removes the app bar's blur layer (the gradient fade stays) */
+    --appBarSeamlessBlur: none;
+
+    /* must go together with the blur removal: without the blur the 1.1x copy would show through as a sharp ghost */
+    --perfBackdropLayers: none;
+    /* the detail page backdrop band then shows the middle of the image instead of its top */
+    --perfItemBackdropAttachment: scroll;
+    --perfCardTransition: none;
+
+    /* --iconShadow is kept so icons stay legible over artwork */
+    --cardShadow: none;
+    --shadow: none;
+
+    --headerColor: rgba(30, 40, 54, 0.96);
+    --drawerColor: rgba(30, 40, 54, 0.98);
+}
+
+:root.layout-tv[data-theme="light"] {
+    --headerColor: rgba(238, 238, 238, 0.96);
+    --drawerColor: rgba(238, 238, 238, 0.98);
+}
+
+/* TV tier - end */
+
+/* phone / tablet tier - start */
+/* the theme already limits the app bar blur to 12px here; that and the now playing bar keep their blur */
+
+:root.layout-mobile {
+    /* the backdrop sits under a 90-100% opaque cover on phones, so the blurred and masked copies are wasted work */
+    --perfBackdropLayers: none;
+    --perfCardTransition: none;
+
+    --drawerColor: rgba(30, 40, 54, 0.97);
+}
+
+:root.layout-mobile[data-theme="light"] {
+    --drawerColor: rgba(238, 238, 238, 0.97);
+}
+
+/* the drawer's blur is recomputed on every frame of the swipe animation */
+.layout-mobile .mainDrawer {
+    --blurLarge: none;
+}
+
+/* uncomment to also drop the now playing bar's blur on phones (it is recomputed on every scroll frame while music plays) */
+/*
+.layout-mobile .appfooter {
+    --blurLargest: none;
+}
+*/
+
+/* phone / tablet tier - end */
+
+/* OS accessibility settings - start */
+
+/* "reduce transparency": switches to the theme's solid app bar style without any blur */
+@media (prefers-reduced-transparency: reduce) {
+    :root {
+        --blurSmallest: none !important;
+        --blurDefault: none !important;
+        --blurLarge: none !important;
+        --blurLargest: none !important;
+        --perfBackdropLayers: none !important;
+
+        --appBarSeamlessBlur: none !important;
+        --appBarColor: var(--headerColor) !important;
+        --appBarBorder: var(--defaultBorder) !important;
+        --appBarTabsPadding: 0 !important;
+
+        --headerColor: rgb(30, 40, 54) !important;
+        --drawerColor: rgb(30, 40, 54) !important;
+    }
+
+    :root[data-theme="light"] {
+        --headerColor: rgb(238, 238, 238) !important;
+        --drawerColor: rgb(238, 238, 238) !important;
+    }
+}
+
+/* "reduce motion": no hover shine, no card scaling, no slide-in animations */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --cardHoverEffect: none !important;
+        --perfCardTransition: none !important;
+        --perfHeadroomTransition: none !important;
+    }
+
+    /* a near-zero duration instead of none: Jellyfin waits for animationend on the backdrop */
+    .backdropImageFadeIn,
+    .layout-mobile .itemBackdrop,
+    .layout-mobile .detailLogo {
+        animation-duration: 0.01ms !important;
+    }
+
+    .cardScalable,
+    .cardImageContainer,
+    .itemSelectionPanel,
+    .cardOverlayContainer,
+    .material-icons {
+        transition: none !important;
+    }
+
+    .card-hoverable:hover .cardScalable,
+    .card-hoverable:hover .cardImageContainer,
+    .card-hoverable:hover .itemSelectionPanel {
+        transform: none !important;
+    }
+}
+
+/* OS accessibility settings - end */
+
+/* lite mode - start */
+/* uncomment the block below to force the TV-tier reductions on every device;
+   or paste only the block into Settings > Display > Custom CSS on one device to apply it there alone */
+
+/*
+:root {
+    --blurSmallest: none !important;
+    --blurDefault: none !important;
+    --blurLarge: none !important;
+    --blurLargest: none !important;
+
+    --appBarSeamlessBlur: none !important;
+    --perfBackdropLayers: none !important;
+    --itemBackdropMask: none !important;
+    --headerBlurMask: none !important;
+    --perfItemBackdropAttachment: scroll !important;
+    --perfCardTransition: none !important;
+    --perfHeadroomTransition: transform 0.2s linear !important;
+    --cardHoverEffect: none !important;
+
+    --cardShadow: none !important;
+    --shadow: none !important;
+
+    --headerColor: rgba(30, 40, 54, 0.96) !important;
+    --drawerColor: rgba(30, 40, 54, 0.98) !important;
+
+    --iconPack: "Material Symbols Rounded Lite" !important;
+}
+
+:root[data-theme="light"] {
+    --headerColor: rgba(238, 238, 238, 0.96) !important;
+    --drawerColor: rgba(238, 238, 238, 0.98) !important;
+}
+*/
+
+/* lite mode - end */
