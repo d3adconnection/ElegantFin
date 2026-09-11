@@ -4489,3 +4489,142 @@ for extended styling, use the add-on */
 }
 
 /* basic styling for the Media Bar Plugin - end */
+
+/* ocean blue palette - start */
+
+/* Re-hues the theme's chrome and accents from its stock blue-grey/indigo to an ocean blue.
+   This block only re-declares variables the theme already defines (plus the four rules below,
+   where the theme hard-codes a base colour), so it stays a pure addition at the end of the file
+   and does not interfere with the 3-way merge against upstream nightly.
+
+   Each colour keeps the relative luminance of the stock colour it replaces and only moves hue and
+   saturation, so contrast ratios stay where upstream put them - a bright cyan at the stock HSL
+   lightness would have been far lighter than the indigo it replaces and would have broken
+   white-on-accent text. The focus ring is the one deliberate exception, noted at its declaration.
+
+   --oceanHue drives all of it: 201 is open sea [default]; ~190 goes tropical/cyan,
+   ~212 goes deep midnight-navy. Saturation and lightness stay per-variable. */
+
+:root {
+    --oceanHue: 201;
+
+    /* Base theme colors */
+    --darkerGradientPoint: hsl(var(--oceanHue), 48%, 10%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 48%, 10%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 38%, 17%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 38%, 17%, 0.85);
+    --gradientPointAlpha: hsla(var(--oceanHue), 38%, 17%, 0.3);
+    --headerColor: hsla(var(--oceanHue), 36%, 18%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 36%, 18%, 0.9);
+
+    --borderColor: hsl(var(--oceanHue), 20%, 34%);
+    --darkerBorderColor: hsl(var(--oceanHue), 22%, 23%);
+    /* --lighterBorderColor is a white alpha - left neutral on purpose, it sits on top of artwork */
+
+    --selectorBackgroundColor: hsl(var(--oceanHue), 26%, 26%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 26%, 26%, 0.5);
+
+    /* dark theme colors */
+    --textColor: hsl(var(--oceanHue), 20%, 85%);
+    --dimTextColor: hsl(var(--oceanHue), 16%, 66%);
+
+    --accentColor: hsl(var(--oceanHue), 85%, 38%);
+    --accentHoverColor: hsl(var(--oceanHue), 80%, 43%);
+    /* stock is a flat white wash; a pale ocean tint at the same luminance reads as part of the palette */
+    --semiTransparentAccentColor: hsla(var(--oceanHue), 90%, 70%, 0.16);
+
+    /* Base component colors */
+    --btnSubmitColor: hsl(var(--oceanHue), 88%, 25%);
+    --btnSubmitBorderColor: hsl(var(--oceanHue), 80%, 42%);
+    --checkboxCheckedBgColor: hsl(var(--oceanHue), 88%, 32%);
+    /* focus ring - deliberately brighter than the stock blue, it is what a TV remote follows */
+    --highlightOutlineColor: hsl(var(--oceanHue), 92%, 38%);
+
+    --tableBodyColor: hsl(var(--oceanHue), 32%, 18%);
+
+    /* textures - these two hard-code the header colour instead of using var(--headerColor) */
+    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 36%, 18%, 0.95) 30%, 55%, transparent 90%);
+    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 36%, 18%), 70%, transparent);
+}
+
+:root[data-theme="light"] {
+    --darkerGradientPoint: hsl(var(--oceanHue), 30%, 96%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 30%, 96%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 26%, 94%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 40%, 99%, 0.85);
+
+    --headerColor: hsla(var(--oceanHue), 28%, 94%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 28%, 94%, 0.9);
+
+    --borderColor: hsl(var(--oceanHue), 18%, 70%);
+    --darkerBorderColor: hsl(var(--oceanHue), 20%, 80%);
+
+    --selectorBackgroundColor: hsl(var(--oceanHue), 40%, 99%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 25%, 90%, 0.5);
+
+    --textColor: hsl(var(--oceanHue), 25%, 14%);
+    --dimTextColor: hsl(var(--oceanHue), 18%, 36%);
+
+    --accentColor: hsl(var(--oceanHue), 88%, 30%);
+    --accentHoverColor: hsl(var(--oceanHue), 85%, 36%);
+
+    --btnSubmitColor: hsl(var(--oceanHue), 82%, 34%);
+    --btnSubmitBorderColor: hsl(var(--oceanHue), 75%, 45%);
+
+    --checkboxCheckedBgColor: hsl(var(--oceanHue), 88%, 38%);
+    --highlightOutlineColor: hsl(var(--oceanHue), 95%, 40%);
+
+    --textareaBackgroundColor: hsl(var(--oceanHue), 40%, 99%);
+    --tableBodyColor: hsl(var(--oceanHue), 40%, 99%);
+
+    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95) 30%, 55%, transparent 90%);
+    --headerColorGradientAlt: linear-gradient(180deg, hsla(var(--oceanHue), 45%, 98%, 0.95), 70%, transparent);
+
+    --cardShadow: 0 1px 6px 0px hsl(var(--oceanHue), 20%, 85%);
+}
+
+/* the four places the theme hard-codes a base colour instead of reading a variable.
+   selectors are copied verbatim from the rules above so they win on source order alone */
+
+.countIndicator,
+.fullSyncIndicator,
+.mediaSourceIndicator {
+    background: hsl(var(--oceanHue), 90%, 29%);
+}
+
+/* these two keep the stock dark tint in both themes, as upstream does - the gradient is drawn over artwork */
+.backgroundContainer.withBackdrop {
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 48%, 10%, 0.25));
+}
+
+.layout-tv .backgroundContainer.withBackdrop {
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 48%, 10%, 0.95));
+}
+
+#loginPage .padded-left.padded-right.padded-bottom-page {
+    background: hsla(var(--oceanHue), 36%, 18%, 0.7);
+}
+
+.metadataSidebarIcon {
+    color: hsl(var(--oceanHue), 26%, 55%);
+}
+
+/* The mini-play button and the watched tick stay green, and delete stays red: they are status
+   colours rather than chrome. Uncomment the block below to pull the two greens to an ocean teal
+   (same luminance again) if the green reads as the odd one out. */
+/*
+:root {
+    --btnMiniPlayColor: hsl(170, 62%, 37%);
+    --btnMiniPlayBorderColor: hsl(170, 58%, 41%);
+}
+
+.playstatebutton-icon-played {
+    color: hsl(168, 60%, 48%);
+}
+
+.playedIndicator {
+    background: hsl(168, 60%, 48%);
+}
+*/
+
+/* ocean blue palette - end */
