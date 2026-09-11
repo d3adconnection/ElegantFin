@@ -4502,10 +4502,19 @@ for extended styling, use the add-on */
                        ~196 goes greener/teal, ~212 goes midnight-navy.
      --oceanAccentHue  the accent - buttons, links, selection. 199 [default].
 
-   The surfaces sit much lighter than stock (17%/28% against upstream's 11%/16% lightness) and much
-   more saturated (88%/85% against 45%/40% in the first pass, a 2.3x jump in channel spread) because
-   that, not the accent, is what makes the theme read as shallow tropical water - the background is
-   the largest surface on screen. The panel keeps upstream's ~10-point lift over the background; the
+   The surfaces sit near stock's lightness (10%/18% against upstream's 11%/16%) but carry far more
+   chroma (100%/95% saturation against 45%/40% in the first pass) because that, not the accent, is
+   what makes the theme read as tropical water - the background is the largest surface on screen.
+   Saturation is the cheap axis here and lightness the expensive one, so the look survives being
+   this dark.
+
+   The lightness is set by the server's Cerulean logo rather than by taste. Its script is
+   hsl(196,78%,37%), 8 degrees off --oceanHue, so nothing but lightness separates the two and an
+   earlier, lighter pass (85%,28%) left the logo at 1.79 against the page. --headerColor is
+   deliberately darker than the page (15% against 18%) because the header is where the logo sits:
+   that puts it at 3.06 on the header, clearing the 3:1 bar for a graphical object, and 2.76 out on
+   the page, where its black drop shadow carries the rest. Raising these lightnesses again without
+   re-checking the logo will bring the clash straight back. The panel keeps upstream's ~10-point lift over the background; the
    first saturated pass flattened that to 2 points and the panels vanished into the page.
    The saturation is close to free: at these lightnesses hue 204 puts most of its luminance in the
    green channel, and raising S trades red down against blue up, so text contrast barely moves
@@ -4527,20 +4536,20 @@ for extended styling, use the add-on */
     --oceanOnAccent: hsl(var(--oceanHue), 85%, 11%);
 
     /* Base theme colors */
-    --darkerGradientPoint: hsl(var(--oceanHue), 88%, 17%);
-    --darkerGradientPointAlpha: hsla(var(--oceanHue), 88%, 17%, 0.85);
-    --lighterGradientPoint: hsl(var(--oceanHue), 85%, 28%);
-    --lighterGradientPointAlpha: hsla(var(--oceanHue), 85%, 28%, 0.85);
-    --gradientPointAlpha: hsla(var(--oceanHue), 85%, 28%, 0.3);
-    --headerColor: hsla(var(--oceanHue), 78%, 27%, 0.8);
-    --drawerColor: hsla(var(--oceanHue), 78%, 27%, 0.9);
+    --darkerGradientPoint: hsl(var(--oceanHue), 100%, 10%);
+    --darkerGradientPointAlpha: hsla(var(--oceanHue), 100%, 10%, 0.85);
+    --lighterGradientPoint: hsl(var(--oceanHue), 95%, 18%);
+    --lighterGradientPointAlpha: hsla(var(--oceanHue), 95%, 18%, 0.85);
+    --gradientPointAlpha: hsla(var(--oceanHue), 95%, 18%, 0.3);
+    --headerColor: hsla(var(--oceanHue), 95%, 15%, 0.8);
+    --drawerColor: hsla(var(--oceanHue), 95%, 15%, 0.9);
 
     --borderColor: hsl(var(--oceanHue), 50%, 50%);
-    --darkerBorderColor: hsl(var(--oceanHue), 58%, 34%);
+    --darkerBorderColor: hsl(var(--oceanHue), 65%, 23%);
     /* --lighterBorderColor is a white alpha - left neutral on purpose, it sits on top of artwork */
 
-    --selectorBackgroundColor: hsl(var(--oceanHue), 58%, 38%);
-    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 58%, 38%, 0.5);
+    --selectorBackgroundColor: hsl(var(--oceanHue), 65%, 27%);
+    --selectorBackgroundColorAlpha: hsla(var(--oceanHue), 65%, 27%, 0.5);
 
     /* dark theme colors */
     --textColor: hsl(var(--oceanHue), 40%, 94%);
@@ -4558,11 +4567,11 @@ for extended styling, use the add-on */
        the --oceanOnAccent label like the accent does rather than white */
     --highlightOutlineColor: hsl(var(--oceanAccentHue), 92%, 64%);
 
-    --tableBodyColor: hsl(var(--oceanHue), 58%, 38%);
+    --tableBodyColor: hsl(var(--oceanHue), 65%, 27%);
 
     /* textures - these two hard-code the header colour instead of using var(--headerColor) */
-    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 78%, 27%, 0.95) 30%, 55%, transparent 90%);
-    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 78%, 27%), 70%, transparent);
+    --headerColorGradient: linear-gradient(180deg, hsla(var(--oceanHue), 95%, 15%, 0.95) 30%, 55%, transparent 90%);
+    --headerColorGradientAlt: linear-gradient(180deg, hsl(var(--oceanHue), 95%, 15%), 70%, transparent);
 }
 
 :root[data-theme="light"] {
@@ -4675,15 +4684,15 @@ for extended styling, use the add-on */
 
 /* these two keep a fixed dark tint in both themes, as upstream does - the gradient is drawn over artwork */
 .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 88%, 17%, 0.25));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 100%, 10%, 0.25));
 }
 
 .layout-tv .backgroundContainer.withBackdrop {
-    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 88%, 17%, 0.95));
+    background: linear-gradient(0deg, var(--darkerGradientPoint), 45%, hsla(var(--oceanHue), 100%, 10%, 0.95));
 }
 
 #loginPage .padded-left.padded-right.padded-bottom-page {
-    background: hsla(var(--oceanHue), 78%, 27%, 0.7);
+    background: hsla(var(--oceanHue), 95%, 15%, 0.7);
 }
 
 .metadataSidebarIcon {
