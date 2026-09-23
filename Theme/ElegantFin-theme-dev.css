@@ -545,6 +545,15 @@ select {
     flex: 0 0 auto !important;
 }
 
+/* offsetWidth is rounded to a whole pixel, so a fractional card width still lets the scroll buttons drift (0.23px a card in Firefox, enough to stall past ~280 cards).
+   Behind @supports because the width uses var(): an unsupported round() would make it invalid at computed-value time, i.e. unset, not the declaration above */
+@supports (width: round(down, 1.5px, 1px)) {
+    #castCollapsible .card,
+    #guestCastContent .card {
+        width: round(down, calc(var(--cardWidth) * var(--castCardWidthFactor) + var(--itemColumnGap)), 1px) !important;
+    }
+}
+
 #castContent,
 #guestCastContent {
     column-gap: 0;
