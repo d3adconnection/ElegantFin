@@ -60,6 +60,8 @@
     --itemColumnGap: 1em;
 
     --minEpisodeCardWidth: 19em;
+    /* cast/crew card width as a fraction of --cardWidth; the portrait is 0.5, so the gap between portraits is (factor - 0.5) x --cardWidth */
+    --castCardWidthFactor: 0.75;
     --appBarHeight: 5em;
 
     --blurSmallest: blur(2px);
@@ -519,7 +521,7 @@ select {
     background-position-y: 33%;
 }
 
-/* shrink cast/crew portraits to half size; the card itself grows to fit the name/role */
+/* shrink cast/crew portraits to half size; every card gets the same width (--castCardWidthFactor) so the portraits are evenly spaced */
 #castCollapsible .cardScalable,
 #guestCastContent .cardScalable {
     width: calc(var(--cardWidth) / 2) !important;
@@ -532,10 +534,10 @@ select {
        so on the portrait it measured the small card box instead of the whole row and came out wider than the card (clipped on the right).
        vw resolves the same on every element, which also lets the portrait's width count towards the card's max-content width */
     --sidePadding: 3.3vw;
-    /* fit-content isn't reliable as a flex-basis here; max-content + a hard max-width clamp is */
-    width: max-content !important;
-    max-width: var(--cardWidth) !important;
-    /* these cards are flex items in the scroller; without this they stretch to fill the leftover row width instead of hugging their content */
+    /* a fixed width rather than max-content, so the portraits sit at an even pitch however long the name/role is; longer text wraps */
+    width: calc(var(--cardWidth) * var(--castCardWidthFactor)) !important;
+    max-width: none !important;
+    /* these cards are flex items in the scroller; without this they stretch or shrink with the leftover row width */
     flex: 0 0 auto !important;
 }
 
