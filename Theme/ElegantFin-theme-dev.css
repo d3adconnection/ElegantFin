@@ -534,11 +534,20 @@ select {
        so on the portrait it measured the small card box instead of the whole row and came out wider than the card (clipped on the right).
        vw resolves the same on every element, which also lets the portrait's width count towards the card's max-content width */
     --sidePadding: 3.3vw;
-    /* a fixed width rather than max-content, so the portraits sit at an even pitch however long the name/role is; longer text wraps */
-    width: calc(var(--cardWidth) * var(--castCardWidthFactor)) !important;
+    /* a fixed width rather than max-content, so the portraits sit at an even pitch however long the name/role is; longer text wraps.
+       The column gap is folded into the card's side padding (column-gap is 0 below): the desktop scroll buttons step by items[0].offsetWidth,
+       which leaves out the gap, so with a gap they fell behind by one gap per card, ran past the last index and threw, stopping short of the end on long casts */
+    width: calc(var(--cardWidth) * var(--castCardWidthFactor) + var(--itemColumnGap)) !important;
+    padding-left: calc(var(--padding) + var(--itemColumnGap) / 2);
+    padding-right: calc(var(--padding) + var(--itemColumnGap) / 2);
     max-width: none !important;
     /* these cards are flex items in the scroller; without this they stretch or shrink with the leftover row width */
     flex: 0 0 auto !important;
+}
+
+#castContent,
+#guestCastContent {
+    column-gap: 0;
 }
 
 /* let the name/role text grow the card a bit, but wrap instead of stretching indefinitely for long text */
